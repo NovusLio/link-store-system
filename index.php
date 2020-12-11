@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>test</title>
-</head>
-<body>
-    <form method="post">
-        <input type="text" name="test">
-    </form>
-</body>
-</html>
 <?php
-var_dump($POST);
 class LinkStoreSystem
 {
     private $i = '';
