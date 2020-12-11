@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Link Store System</title>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</head>
+
+<style type="text/css">
+  div.box{clear: both;margin: 0 auto;width: 1024px;}
+  div.form{float: left;width: 40%;padding: 5%;}
+  div.line{line-height: 40px;}
+</style>
+
+<body>
+  <div class="box">
+    <div class="form">
+      <h5>Store the link:</h5>
+      <div class="line">
+        <label>Input:</label>
+        <input type="text" name="link">
+      </div>
+      <div class="line">
+        <label>Output:</label>
+        <span id="code"></span>
+      </div>
+    </div>
+    <div class="form">
+      <h5>Start typing a code in the input:</h5>
+      <div class="line">
+        <label>Input:</label>
+        <input type="text" name="code">
+      </div>
+      <div class="line">
+        <label>Output:</label>
+        <span id="link"></span>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    function genCode(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    }
+
+    function getCodeLink()
+    {
+      if (localStorage.getItem('code-link'))
+        return JSON.parse(localStorage.getItem('code-link'));
+      else
+        return {};
+    }
+
+    function setCodeLink(val)
+    {
+      localStorage.setItem('code-link', JSON.stringify(val));
+    }
+
+    $(document).on('change', 'input[name="link"]', function(){
+      var codelink = getCodeLink();
+      var code = '';
+
+      if (codelink)
+      {
+        while (true)
+        {
+          code = genCode(6);
+          if (!codelink[code])
+            break;
+        }
+      }
+
+      codelink[code] = $(this).val();
+      $(document).find('#code').text(code);
+      setCodeLink(codelink);
+    });
+
+    $(document).on('change', 'input[name="code"]', function() {
+      var codelink = getCodeLink();
+      var val = $(this).val();
+      if (codelink[val]) {
+        $(document).find('#link').text(codelink[val]);
+      } else {
+        $(document).find('#link').text('link not found');
+      }
+    });
+  </script>
+</body>
+</html>
